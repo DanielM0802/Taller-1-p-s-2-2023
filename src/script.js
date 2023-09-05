@@ -4,9 +4,16 @@ import fs from "fs";
 import yargs from "yargs";
 import { hideBin } from "yargs/helpers";
 import filterByPrice from "./filter-by-price.js";
-const argv = yargs(hideBin(process.argv)).argv;
+import dotenv from "dotenv";
 
-const city = argv.location || "temuco-la-araucania";
+dotenv.config();
+
+const argv = yargs(hideBin(process.argv)).argv;
+const perPage = argv.perPage || process.env.PER_PAGE;
+const maximumPrice = argv.maximumPrice || process.env.MAXIMUM_PRICE;
+const city = argv.location || process.env.CITY;
+
+
 const MAX_pages = argv.maxPages || 1;
 let houses = [];
 let page = 0;
@@ -17,13 +24,9 @@ async function getHousesFromWeb() {
 	console.log(`Page ${page + 1} of ${MAX_pages}`);
 	console.log(argv);
 
-	const baseUrl = 'https://www.portalinmobiliario.com';
-	const resourcePath = '/venta/casa/propiedades-usadas/';
-	const perPage = argv.perPage || 50;
 	const nextPage = page + 1;
-	const indexParam = '_NoIndex_True';
 
-	const url = `${baseUrl}${resourcePath}${city}/_Desde_${perPage * nextPage}${indexParam}`;
+	const url = `${process.env.BASE_URL}${process.env.RESOURCE_PATH}${city}/_Desde_${perPage * nextPage}${process.env.INDEX_PARAM}`;
 	const response = await axios.get(url);
 
 	// Get the HTML code of the webpage
@@ -95,7 +98,6 @@ getHousesFromWeb().then(async () => {
 		}
 	);
 
-	const maximumPrice = argv.maximumPrice || 100000000;
 	
 	if (maximumPrice) {
 		console.log("Ejecutando.....")
