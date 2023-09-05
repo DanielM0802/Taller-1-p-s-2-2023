@@ -6,6 +6,11 @@ import { hideBin } from "yargs/helpers";
 import filterByPrice from "./filter-by-price.js";
 import dotenv from "dotenv";
 
+import utils from "./utils/utils.js";
+
+const { writeJsonToFile } = utils;
+
+
 dotenv.config();
 
 const argv = yargs(hideBin(process.argv)).argv;
@@ -86,17 +91,7 @@ getHousesFromWeb().then(async () => {
 		};
 	});
 
-	fs.writeFile(
-		`./json/${city}.json`,
-		JSON.stringify(housesWithPriceInCLP),
-		function (err) {
-			if (err) {
-				console.log(err);
-			}
-			console.log(`${city} JSON generated successfully`);
-		}
-	);
-
+	writeJsonToFile(`./json/${city}.json`, JSON.stringify(housesWithPriceInCLP), city);
 	
 	if (maximumPrice) {
 		filterByPrice({

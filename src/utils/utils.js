@@ -29,17 +29,23 @@ function generateJsonFile(houses, city) {
 	const filePath = `./json/${city}.json`;
 	const jsonData = JSON.stringify(houses);
 
-	fs.writeFile(filePath, jsonData, (err) => {
-		if (err) {
-			console.log(err);
-		}
-		console.log(`${city} JSON generated successfully`);
-	});
+	writeJsonToFile(filePath, jsonData, city);
+
+}
+
+function writeJsonToFile(filePath, jsonData, city) {
+    fs.writeFile(filePath, jsonData, (err) => {
+        if (err) {
+            console.log(err);
+        }
+        console.log(`${city} JSON generated successfully`);
+    });
 }
 
 const utils = {
     generateXlsxFile,
     generateJsonFile,
+	writeJsonToFile
 }
 
 export default utils;
