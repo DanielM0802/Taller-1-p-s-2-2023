@@ -22,7 +22,6 @@ const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
 async function getHousesFromWeb() {
 	console.log(`Page ${page + 1} of ${MAX_pages}`);
-	console.log(argv);
 
 	const nextPage = page + 1;
 
@@ -100,7 +99,6 @@ getHousesFromWeb().then(async () => {
 
 	
 	if (maximumPrice) {
-		console.log("Ejecutando.....")
 		filterByPrice({
 			houses: housesWithPriceInCLP,
 			maximumPrice,
