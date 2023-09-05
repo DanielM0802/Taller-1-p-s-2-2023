@@ -1,6 +1,6 @@
 # Taller 1 - Pruebas de software
 
-Description here
+Integrantes: Elian Bustamante - Daniel Marillanca
 
 ### Install libraries
 

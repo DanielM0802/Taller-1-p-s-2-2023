@@ -1,36 +1,27 @@
-import XLSX from "xlsx";
-import fs from "fs";
+
+import utils from "./utils/utils.js";
+
+const { generateXlsxFile, generateJsonFile } = utils;
 
 function filterByPrice({ houses, maximumPrice, city }) {
 	const filteredHouses = houses
-		.filter(
-			(house) =>
-				Number(house.priceInCLP.replace("$", "").replace(/\./g, "")) <
-				maximumPrice
-		)
-		.map((filterHouse) => {
-			return {
-				Location: filterHouse.location,
-				URL: filterHouse.url,
-			};
-		});
+		.filter((house) => isHousePriceBelowMaximum(house, maximumPrice))
+		.map((house) => getHouseLocationAndUrl(house));
 
-	const workSheet = XLSX.utils.json_to_sheet(filteredHouses);
-	const workBook = XLSX.utils.book_new();
-	XLSX.utils.book_append_sheet(workBook, workSheet, "Houses");
-	XLSX.writeFile(workBook, `./xlsx/${city}.xlsx`);
-	console.log(`${city} XLSX File generated successfully`);
+	generateXlsxFile(filteredHouses, city);
+	generateJsonFile(filteredHouses, city);
+}
 
-	fs.writeFile(
-		`./json/${city}.json`,
-		JSON.stringify(filteredHouses),
-		function (err) {
-			if (err) {
-				console.log(err);
-			}
-			console.log(`${city} JSON generated successfully`);
-		}
-	);
+function isHousePriceBelowMaximum(house, maximumPrice) {
+	const housePrice = Number(house.priceInCLP.replace("$", "").replace(/\./g, ""));
+	return housePrice < maximumPrice;
+}
+
+function getHouseLocationAndUrl(house) {
+	return {
+		Location: house.location,
+		URL: house.url,
+	};
 }
 
 export default filterByPrice;
