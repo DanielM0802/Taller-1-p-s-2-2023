@@ -91,10 +91,13 @@ getHousesFromWeb().then(async () => {
 		}
 	);
 
-	if (argv.maximumPrice) {
+	const maximumPrice = argv.maximumPrice || 100000000;
+	
+	if (maximumPrice) {
+		console.log("Ejecutando.....")
 		filterByPrice({
 			houses: housesWithPriceInCLP,
-			maximumPrice: argv.maximumPrice,
+			maximumPrice,
 			city,
 		});
 	}
