@@ -15,12 +15,16 @@ const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
 async function getHousesFromWeb() {
 	console.log(`Page ${page + 1} of ${MAX_pages}`);
+	console.log(argv);
 
-	const response = await axios.get(
-		`https://www.portalinmobiliario.com/venta/casa/propiedades-usadas/${city}/_Desde_${
-			(argv.perPage || 50) * (page + 1)
-		}_NoIndex_True`
-	);
+	const baseUrl = 'https://www.portalinmobiliario.com';
+	const resourcePath = '/venta/casa/propiedades-usadas/';
+	const perPage = argv.perPage || 50;
+	const nextPage = page + 1;
+	const indexParam = '_NoIndex_True';
+
+	const url = `${baseUrl}${resourcePath}${city}/_Desde_${perPage * nextPage}${indexParam}`;
+	const response = await axios.get(url);
 
 	// Get the HTML code of the webpage
 	const html = response.data;
